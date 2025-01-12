@@ -81,9 +81,16 @@ func (s *Server) TemporaryRedirect(w http.ResponseWriter, r *http.Request, strUR
 }
 
 func (s *Server) MaskedRedirect(w http.ResponseWriter, r *http.Request, strURL string) {
-	w.Header().Set("Content-type", "text/html")
-	t, _ := template.ParseFiles("redirect.tmpl")
-	t.Execute(w, &frame{Src: strURL})
+    w.Header().Set("Content-type", "text/html")
+    t, err := template.ParseFiles("redirect.tmpl")
+    if err != nil {
+        http.Error(w, "Template parsing error", http.StatusInternalServerError)
+        return
+    }
+    t.Execute(w, &frame{
+        Src:   strURL,
+        Title: getTitle(),
+    })
 }
 
 func queryRedirectTarget(host string) (string, error) {
@@ -119,6 +126,15 @@ func queryRedirectTarget(host string) (string, error) {
 	return "", err
 }
 
+func getTitle() string {
+    title := os.Getenv("FRAME_TITLE")
+    if title == "" {
+        title = "Brighella"
+    }
+    return title
+}
+
 type frame struct {
 	Src string
+	Title string
 }
