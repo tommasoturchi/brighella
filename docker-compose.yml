@@ -1,0 +1,10 @@
+version: '3.8'
+
+services:
+  brighella:
+    build: .
+    ports:
+      - "3018:8080"
+    environment:
+      - PORT=8080
+    restart: unless-stopped 
