@@ -214,7 +214,7 @@ func fetchPageMetadata(url string) (title, favicon string, err error) {
 
 	// If no favicon found, use a default one
 	if favicon == "" {
-		favicon = "https://fav.farm/📸"
+		favicon = "https://fav.farm/🎭"
 	}
 
 	return title, favicon, nil
